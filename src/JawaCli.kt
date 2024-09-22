@@ -1,4 +1,5 @@
 import jawa.lang.*
+import jawa.lang.visitors.CommonVisitor
 
 class JawaCli {
 
@@ -9,6 +10,10 @@ class JawaCli {
         tokens.forEach { println(it.prettyPrint()) }
         println("out: ${Parser(tokens).parse().accept(CommonVisitor(environment))}")
     }
+
+    // Math test:
+    // - 10 + (2 * |5 - 10|^2) => 60
+    // -
 
     fun run() {
         while (true) {

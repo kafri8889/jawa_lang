@@ -2,7 +2,12 @@ package jawa.lang
 
 enum class Token {
     // Keyword
-    Keyword,
+    Fun,
+    Const,
+    Mutable,
+    Immutable,
+    True,
+    False,
 
     // Identifier (variable name, function, or class)
     Identifier,
@@ -13,10 +18,13 @@ enum class Token {
     Multiply,
     Divide,
     Equals,
+    Pow,
+    Abs,
     And,
     Or,
+    Exclamation,
 
-    // Literal (string or num)
+    // Literal (string, num, boolean, etc)
     Literal,
 
     // Separator/punctuator
@@ -29,8 +37,15 @@ enum class Token {
     Eof,  // End of line
     NewLine;  // \n
 
+    /**
+     * Return `true` if this token match any of [other]
+     */
+    fun match(vararg other: Token): Boolean {
+        return this in other
+    }
+
     companion object {
-        val mathOperators = listOf(Plus, Minus, Multiply, Divide)
+        val mathOperators = listOf(Plus, Minus, Multiply, Divide, Pow)
     }
 }
 

@@ -23,9 +23,14 @@ class Lexer(private val input: String) {
             currentPosition++
 
             if (currentIndex >= input.length) break
-        } while (input[currentIndex].isDigit())
+        } while (input[currentIndex].isDigit() || input[currentIndex].equals('L', true))
 
-        return TokenInfo(IntLiteral(num.toInt()), Token.Literal, currentLine, startPos, currentPosition)
+        val literal: Literal<out Number> = when {
+            num.endsWith("L", ignoreCase = true) -> LongLiteral(num.filter { it.isDigit() }.toLong())
+            else -> IntLiteral(num.toInt())
+        }
+
+        return TokenInfo(literal, Token.Literal, currentLine, startPos, currentPosition)
     }
 
     private fun parseStringLiteral(): TokenInfo {
@@ -42,11 +47,35 @@ class Lexer(private val input: String) {
             currentPosition++
         }
 
-        // Move pos from closing " to the string value
+        // Move pos from closing "
         currentIndex++
         currentPosition++
 
         return TokenInfo(StringLiteral(string), Token.Literal, currentLine, startPos, currentPosition)
+    }
+
+    private fun parseCharLiteral(): TokenInfo {
+        var string = ""
+        val startPos = currentPosition
+
+        // Move pos from opening ' to the char value
+        currentIndex++
+        currentPosition++
+
+        while (currentIndex < input.length && input[currentIndex] != '\'') {
+            string += input[currentIndex]
+            currentIndex++
+            currentPosition++
+        }
+
+        // Move pos from closing '
+        currentIndex++
+        currentPosition++
+
+        if (string.length > 1) throw ParseException("Too many characters in a character literal \"$string\"")
+        if (string.isBlank()) throw ParseException("Empty char literal")
+
+        return TokenInfo(CharLiteral(string[0]), Token.Literal, currentLine, startPos, currentPosition)
     }
 
     private fun checkWhiteSpace(): TokenInfo? {
@@ -71,9 +100,19 @@ class Lexer(private val input: String) {
             currentIndex++
         }
 
-        val token = if (id in Keywords.keywordValues) Token.Keyword else Token.Identifier
+        var token = keywords[id] ?: Token.Identifier
+        val value = when (token) {
+            Token.True -> BooleanLiteral(true)
+            Token.False -> BooleanLiteral(false)
+            else -> id
+        }
 
-        return TokenInfo(id, token, currentLine, startPos, currentPosition)
+        token = when (token) {
+            Token.True, Token.False -> Token.Literal
+            else -> token
+        }
+
+        return TokenInfo(value, token, currentLine, startPos, currentPosition)
     }
 
     fun tokenize(): List<TokenInfo> {
@@ -91,6 +130,7 @@ class Lexer(private val input: String) {
                     currentIndex++
                     currentPosition = 0
                 }
+                // Recognize comment
                 input.startsWith("//", currentIndex) -> {
                     val startPos = currentPosition
 
@@ -110,6 +150,7 @@ class Lexer(private val input: String) {
                     currentLine++
                     currentPosition = 0
                 }
+                // Recognize comment
                 input.startsWith("/*", currentIndex) -> {
                     val startPos = currentPosition
 
@@ -139,17 +180,31 @@ class Lexer(private val input: String) {
                 }
                 currentInput.isDigit() -> tokens.add(parseNumberLiteral())
                 currentInput == '"' -> tokens.add(parseStringLiteral())
+                currentInput == '\'' -> tokens.add(parseCharLiteral())
                 else -> {
                     var token: Token? = null
 
-                    if (currentInput == '+' || currentInput == '-' || currentInput == '*' || currentInput == '/') {
+                    if (
+                        currentInput == '+' ||
+                        currentInput == '-' ||
+                        currentInput == '*' ||
+                        currentInput == '/' ||
+                        currentInput == '^' ||
+                        currentInput == '&'
+                    ) {
                         token = when (currentInput) {
                             '+' -> Token.Plus
                             '-' -> Token.Minus
                             '*' -> Token.Multiply
                             '/' -> Token.Divide
+                            '^' -> Token.Pow
+                            '&' -> Token.And
                             else -> throw UnsupportedOperationException("Unsupported operator $currentInput in index $currentIndex")
                         }
+                    }
+
+                    if (currentInput == '|') {
+                        token = Token.Abs
                     }
 
                     if (currentInput == '(') {

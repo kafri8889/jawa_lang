@@ -1,38 +1,10 @@
 package jawa.lang
 
-data class Keyword(
-    val identifier: String,
-    val token: Token = Token.Keyword
+val keywords: HashMap<String, Token> = hashMapOf(
+    "fun" to Token.Fun,
+    "konst" to Token.Const,
+    "tetap" to Token.Immutable,
+    "ubah" to Token.Mutable,
+    "true" to Token.True,
+    "false" to Token.False,
 )
-
-object Keywords {
-
-    val function = Keyword(
-        identifier = "fun"
-    )
-
-    /**
-     * Constant variable
-     */
-    val const = Keyword(
-        identifier = "konst"
-    )
-
-    val immutableVariable = Keyword(
-        identifier = "tetap"
-    )
-
-    val mutableVariable = Keyword(
-        identifier = "ubah"
-    )
-
-    val values = listOf(
-        function,
-        const,
-        immutableVariable,
-        mutableVariable
-    )
-
-    val keywordValues = values.map { it.identifier }
-
-}
