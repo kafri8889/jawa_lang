@@ -1,4 +1,4 @@
-package jawa.lang
+package jawa.lang.errors
 
 class ParseException(
     override val message: String?,

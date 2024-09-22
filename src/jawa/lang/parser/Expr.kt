@@ -1,4 +1,6 @@
-package jawa.lang
+package jawa.lang.parser
+
+import jawa.lang.lexer.Token
 
 sealed class Expr: Node {
     abstract fun <T> accept(visitor: Visitor<T>): T
@@ -11,7 +13,6 @@ sealed class Expr: Node {
         fun visitCharExpr(expr: CharExpr): T
         fun visitNumberExpr(expr: NumberExpr): T
         fun visitAbsExpr(expr: AbsExpr): T
-        fun visitVariableDeclarationExpr(expr: VariableDeclarationExpr): T
     }
 }
 
@@ -61,26 +62,5 @@ class CharExpr(val value: Char): Expr() {
 class AbsExpr(val expression: Expr) : Expr() {
     override fun <R> accept(visitor: Visitor<R>): R {
         return visitor.visitAbsExpr(this)
-    }
-}
-
-
-class VariableDeclarationExpr(
-    /**
-     * Variable name
-     */
-    val identifier: String,
-    /**
-     * Variable type ([Keywords.immutableVariable] or [Keywords.mutableVariable])
-     */
-    val type: String,
-//    /**
-//     * Variable data type
-//     */
-//    val dataType: String,
-    val expr: Expr
-): Expr() {
-    override fun <T> accept(visitor: Visitor<T>): T {
-        return visitor.visitVariableDeclarationExpr(this)
     }
 }

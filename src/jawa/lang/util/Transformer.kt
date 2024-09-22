@@ -1,6 +1,6 @@
 package jawa.lang.util
 
-import jawa.lang.Token
+import jawa.lang.lexer.Token
 
 interface Transformer<T, U> {
 

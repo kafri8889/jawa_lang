@@ -1,1 +1,5 @@
-tetap iniVariabel = 2 + 3
+val a = 2 + 3
+a = 3
+b = 2-32+32/23
+a
+b

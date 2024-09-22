@@ -1,4 +1,4 @@
-package jawa.lang
+package jawa.lang.lexer
 
 data class TokenInfo(
     val value: Any?,

@@ -1,4 +1,4 @@
-package jawa.lang
+package jawa.lang.parser
 
 interface Node
 
@@ -33,3 +33,7 @@ data class CharLiteral(
 data class BooleanLiteral(
     override val value: Boolean
 ): Literal<Boolean>
+
+data class VariableAccess(
+    val identifier: String
+): Node

@@ -1,0 +1,19 @@
+
+/**
+Expr: Expression, like binary expression, unary expression, etc.
+Vdec: Variable declaration.
+**/
+
+Expr -> Expr Op Expr
+     -> (E)
+     -> |E|
+     -> Type  // the value like integer, string, etc.
+
+Vdec -> identifier = Expr
+     -> identifier: Type = Expr
+     -> val identifier = Expr
+     -> val identifier: Type = Expr
+
+int -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+Op -> + | - | * | / | ^

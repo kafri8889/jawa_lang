@@ -1,0 +1,5 @@
+// Variable declaration
+a = 10          // mutable
+a: Int = 10          // mutable
+val a = 10      // immutable
+val a: Int = 10      // immutable

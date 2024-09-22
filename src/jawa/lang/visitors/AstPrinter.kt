@@ -1,6 +1,6 @@
 package jawa.lang.visitors
 
-import jawa.lang.*
+import jawa.lang.parser.*
 import jawa.lang.util.MathTokenTransformer
 
 class AstPrinter: Expr.Visitor<Any> {
@@ -42,7 +42,4 @@ class AstPrinter: Expr.Visitor<Any> {
         return "|$value|"
     }
 
-    override fun visitVariableDeclarationExpr(expr: VariableDeclarationExpr): Any {
-        return ""
-    }
 }

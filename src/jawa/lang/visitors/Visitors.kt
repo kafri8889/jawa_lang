@@ -1,6 +1,8 @@
 package jawa.lang.visitors
 
-import jawa.lang.*
+import jawa.lang.errors.ParseException
+import jawa.lang.lexer.Token
+import jawa.lang.parser.*
 import kotlin.math.abs
 import kotlin.math.pow
 
@@ -12,7 +14,7 @@ import kotlin.math.pow
  * - arithmetic operation
  * - variable declaration
  */
-class CommonVisitor(private val environment: Environment): Expr.Visitor<Any> {
+class CommonExpressionVisitor: Expr.Visitor<Any> {
     override fun visitBinaryExpr(expr: BinaryExpr): Any {
         val left = expr.left.accept(this)
         val right = expr.right.accept(this)
@@ -242,11 +244,4 @@ class CommonVisitor(private val environment: Environment): Expr.Visitor<Any> {
         }
     }
 
-    override fun visitVariableDeclarationExpr(expr: VariableDeclarationExpr): Any {
-        val value = expr.expr.accept(this)
-
-        environment.setVariable(expr.identifier, value)
-
-        return value
-    }
 }

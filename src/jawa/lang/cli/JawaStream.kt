@@ -1,3 +1,5 @@
+package jawa.lang.cli
+
 import java.io.File
 
 class JawaStream(private val jawaFile: File) {

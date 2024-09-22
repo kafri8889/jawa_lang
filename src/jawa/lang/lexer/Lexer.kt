@@ -1,4 +1,8 @@
-package jawa.lang
+package jawa.lang.lexer
+
+import jawa.lang.errors.ParseException
+import jawa.lang.keywords
+import jawa.lang.parser.*
 
 class Lexer(private val input: String) {
 
@@ -94,7 +98,7 @@ class Lexer(private val input: String) {
         var id = ""
         val startPos = currentPosition
 
-        while (currentIndex < input.length && !input[currentIndex].isWhitespace()) {
+        while (currentIndex < input.length && input[currentIndex].isLetter()) {
             id += input[currentIndex]
             currentPosition++
             currentIndex++
@@ -221,6 +225,14 @@ class Lexer(private val input: String) {
 
                     if (currentInput == '=') {
                         token = Token.Equals
+                    }
+
+                    if (currentInput == ':') {
+                        token = Token.Colon
+                    }
+
+                    if (currentInput == ';') {
+                        token = Token.Semicolon
                     }
 
                     if (token != null) tokens.add(

@@ -1,4 +1,4 @@
-package jawa.lang
+package jawa.lang.lexer
 
 enum class Token {
     // Keyword
@@ -31,6 +31,7 @@ enum class Token {
     OpenParent,
     ClosedParent,
     Semicolon,
+    Colon,
 
     // Other
     Comment,
